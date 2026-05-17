@@ -10,6 +10,13 @@ const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin']
 export const metadata: Metadata = {
   title: 'RafikiSMS API Documentation',
   description: 'Complete API reference for the RafikiSMS platform - send SMS, OTP, manage sender names, and more.',
+  icons: {
+    icon: [
+      { url: '/rafiki.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32' },
+    ],
+    shortcut: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
