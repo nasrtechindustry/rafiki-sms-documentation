@@ -1,3 +1,5 @@
+name: rafikisms-documentation
+
 services:
   documentation:
     build:
@@ -6,9 +8,10 @@ services:
       args:
         NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-https://api.rafikisms.com}
     image: rafikisms-documentation:latest
+    container_name: rafikisms-documentation
     restart: unless-stopped
     ports:
-      - "${DOCS_PORT:-3000}:3000"
+      - "${DOCS_PORT:-40406}:3000"
     environment:
       NODE_ENV: production
       NEXT_TELEMETRY_DISABLED: "1"
