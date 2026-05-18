@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   BookOpen,
   Lock,
@@ -61,6 +61,9 @@ const nav = [
   { href: '/errors', label: 'Errors', icon: AlertCircle },
 ];
 
+const CHILD_HEIGHT = 32;
+const CHILD_GAP = 2;
+
 function NavItem({
   item,
   pathname,
@@ -74,6 +77,11 @@ function NavItem({
   const isChildActive = hasChildren && item.children.some(c => pathname === c.href);
   const [open, setOpen] = useState(isChildActive);
   const Icon = item.icon;
+
+  const activeIndex = useMemo(() => {
+    if (!hasChildren) return -1;
+    return item.children.findIndex(c => pathname === c.href);
+  }, [pathname, hasChildren, item]);
 
   if (hasChildren) {
     return (
@@ -89,15 +97,27 @@ function NavItem({
           {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
         </button>
         {open && (
-          <div className="ml-6 mt-1 flex flex-col gap-0.5 border-l border-gray-200 dark:border-gray-700 pl-3">
-            {item.children.map(child => {
+          <div className="ml-6 mt-1 flex flex-col gap-0.5 relative pl-3">
+            {/* Static track */}
+            <div className="absolute left-0 top-1 bottom-1 w-px bg-gray-200 dark:bg-gray-700 rounded-full" />
+            {/* Animated indicator */}
+            <div
+              className="absolute left-0 w-0.5 bg-teal-500 dark:bg-teal-400 rounded-full transition-all duration-300 ease-out"
+              style={{
+                height: CHILD_HEIGHT - 4,
+                top: activeIndex >= 0 ? activeIndex * (CHILD_HEIGHT + CHILD_GAP) + 2 : -9999,
+                opacity: activeIndex >= 0 ? 1 : 0,
+              }}
+            />
+            {item.children.map((child, idx) => {
               const active = pathname === child.href;
               return (
                 <Link
                   key={child.href}
                   href={child.href}
                   onClick={onNavigate}
-                  className={`block px-2 py-1.5 rounded-md text-sm transition-colors ${
+                  style={{ height: CHILD_HEIGHT }}
+                  className={`flex items-center px-2 py-1.5 rounded-md text-sm transition-all duration-200 ${
                     active
                       ? 'text-teal-600 dark:text-teal-400 font-medium bg-teal-50 dark:bg-teal-900/20'
                       : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/40'

@@ -163,7 +163,7 @@ export const openApiSpec = {
         tags: ['OTP'],
         summary: 'Generate OTP',
         description:
-          'Sends a one-time password to a phone number. The OTP code is never returned in the API response. Use the returned reference_id when verifying the user-entered code. Rate limit: 3 generate calls per phone number per 5 minutes.',
+          'Sends a one-time password to a phone number. The OTP code is never returned in the API response. Use the returned reference_id when verifying the user-entered code. Rate limit: 3 generate calls per phone number per 5 minutes. If sender_id is omitted, the SMS will be sent using the RafikiSMS default company sender name instead of your brand.',
         security: [{ ApiKeyAuth: [] }],
         requestBody: {
           required: true,

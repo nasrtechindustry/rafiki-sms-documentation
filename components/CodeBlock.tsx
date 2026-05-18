@@ -6,7 +6,7 @@ import { codeToHtml } from 'shiki';
 import { useTheme } from './ThemeProvider';
 
 export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
-type Lang = 'javascript' | 'python' | 'curl' | 'php' | 'go';
+type Lang = 'javascript' | 'python' | 'curl' | 'php' | 'go' | 'java';
 
 const LANGS: { value: Lang; label: string }[] = [
   { value: 'javascript', label: 'JavaScript' },
@@ -14,6 +14,7 @@ const LANGS: { value: Lang; label: string }[] = [
   { value: 'curl', label: 'cURL' },
   { value: 'php', label: 'PHP' },
   { value: 'go', label: 'Go' },
+  { value: 'java', label: 'Java' },
 ];
 
 const SHIKI_LANG: Record<Lang, string> = {
@@ -22,6 +23,7 @@ const SHIKI_LANG: Record<Lang, string> = {
   curl: 'bash',
   php: 'php',
   go: 'go',
+  java: 'java',
 };
 
 function generateCode(
@@ -66,25 +68,25 @@ print(response.json())`;
   }
 
   if (lang === 'php') {
-    const hdrLines = headers.map(({ key, value }) => `$req->setHeader('${key}', '${value}');`).join('\n');
+    const headersJson = JSON.stringify(hdrs, null, 4);
+    const bodyLine = body && method !== 'GET'
+      ? `    'json' => ${JSON.stringify(body, null, 4)},\n`
+      : '';
     return `<?php
-require 'vendor/autoload.php';
 
-$client = new GuzzleHttp\\Client();
-$req = new GuzzleHttp\\Psr7\\Request('${method}', '${url}');
-${hdrLines}
-${body && method !== 'GET' ? `$req->getBody()->write('${JSON.stringify(body)}');` : ''}
-try {
-    $res = $client->send($req);
-    echo $res->getBody()->getContents();
-} catch (GuzzleHttp\\Exception\\RequestException $e) {
-    echo $e->getMessage();
-}`;
+$client = new \\GuzzleHttp\\Client();
+$response = $client->${method === 'GET' ? 'get' : 'request'}('${method}', '${url}', [
+    'headers' => ${headersJson},
+${bodyLine}]);
+echo $response->getBody();`;
   }
 
-  // go
-  const hdrLines = headers.map(({ key, value }) => `req.Header.Add("${key}", "${value}")`).join('\n\t');
-  return `package main
+  if (lang === 'go') {
+    const bodyVar = body && method !== 'GET'
+      ? `\tbody := strings.NewReader(\`${JSON.stringify(body)}\`)\n\treq, err := http.NewRequest("${method}", "${url}", body)`
+      : `\treq, err := http.NewRequest("${method}", "${url}", nil)`;
+    const hdrLines = headers.map(({ key, value }) => `\treq.Header.Add("${key}", "${value}")`).join('\n');
+    return `package main
 
 import (
 \t"fmt"
@@ -94,10 +96,9 @@ import (
 )
 
 func main() {
-\t${body && method !== 'GET' ? `body := strings.NewReader(\`${JSON.stringify(body, null, 2)}\`)
-\treq, err := http.NewRequest("${method}", "${url}", body)` : `req, err := http.NewRequest("${method}", "${url}", nil)`}
+${bodyVar}
 \tif err != nil { fmt.Println(err); return }
-\t${hdrLines}
+${hdrLines}
 
 \tclient := &http.Client{}
 \tresp, err := client.Do(req)
@@ -107,6 +108,39 @@ func main() {
 \tfmt.Println(resp.Status)
 \tfmt.Println(string(body))
 }`;
+  }
+
+  // java
+  let javaBody = '';
+  if (method === 'GET') {
+    javaBody = `HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create("${url}"))
+        .header("Accept", "application/json")
+        ${headers.map(({ key, value }) => `.header("${key}", "${value}")`).join('\n        ')}
+        .GET()
+        .build();`;
+  } else {
+    javaBody = `String json = ${JSON.stringify(JSON.stringify(body, null, 2))};
+HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create("${url}"))
+        .header("Content-Type", "application/json")
+        ${headers.map(({ key, value }) => `.header("${key}", "${value}")`).join('\n        ')}
+        .method("${method}", HttpRequest.BodyPublishers.ofString(json))
+        .build();`;
+  }
+
+  return `import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+HttpClient client = HttpClient.newHttpClient();
+
+${javaBody}
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.statusCode());
+System.out.println(response.body());`;
 }
 
 function useHighlight(code: string, lang: string, isDark: boolean) {
