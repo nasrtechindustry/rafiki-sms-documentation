@@ -22,18 +22,18 @@ export default function RequestSenderNamePage() {
           { key: 'X-API-Key', value: 'sk_your_api_key_here', enabled: true },
         ]}
         requestBody={{
-          senderid: 'STARSHINE',
+          sender_id: 'STARSHINE',
           sample_content: 'This sender name will be used for sending order confirmations and delivery notifications to our customers',
         }}
         successResponse={{
           status: 'success',
-          message: 'Sender name requested successfully',
-          data: { senderid: 'STARSHINE', sample_content: 'This sender name will be used for sending order confirmations', id: '24e1ffaf-e399-4b15-983a-53539e4970bd', status: 'pending' },
+          message: 'Sender name request submitted',
+          data: { sender_id: 'STARSHINE', sample_content: 'This sender name will be used for sending order confirmations', id: '24e1ffaf-e399-4b15-983a-53539e4970bd', status: 'pending' },
         }}
         errorResponse={{
           status: 'error',
           message: 'Validation failed',
-          errors: { senderid: ['Sender ID must not exceed 11 characters'], sample_content: ['Sample content must be at least 15 characters'] },
+          errors: { sender_id: ['Sender ID must not exceed 11 characters'], sample_content: ['Sample content must be at least 15 characters'] },
         }}
       />
     </div>
