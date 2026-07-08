@@ -15,7 +15,7 @@ export default function RequestSenderNamePage() {
         title="Request Sender Name"
         method="POST"
         url={`${baseUrl}/v1/sender-names/request`}
-        description="Request a new sender name. The sender ID must not exceed 11 characters and can only contain letters, numbers, spaces, hyphens (-), and dots (.). Sample content must be at least 15 characters describing the purpose of the sender name."
+        description="Request a new sender name. The sender ID must not exceed 11 characters and can only contain letters, numbers, spaces, hyphens (-), and dots (.). Sample content must be at least 15 characters describing the purpose of the sender name. Note: This endpoint uses Bearer token auth (dashboard session). To use X-API-Key auth, request sender names via the dashboard at Profile → Sender Names."
         headers={[
           { key: 'Accept', value: 'application/json', enabled: true },
           { key: 'Content-Type', value: 'application/json', enabled: true },
