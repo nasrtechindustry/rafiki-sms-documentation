@@ -189,7 +189,7 @@ export function Sidebar() {
   return (
     <>
       {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-700">
         <Link href="/" className="flex items-center gap-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/rafiki.svg" alt="RafikiSMS" className="w-8 h-8 object-contain" />
@@ -216,14 +216,14 @@ export function Sidebar() {
             className="lg:hidden fixed inset-0 z-30 bg-black/40"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="lg:hidden fixed top-0 left-0 bottom-0 z-40 w-72 bg-white dark:bg-gray-900 shadow-xl">
+          <div className="lg:hidden fixed top-0 left-0 bottom-0 z-40 w-72 bg-white dark:bg-black shadow-xl">
             <SidebarContent pathname={pathname} onNavigate={() => setMobileOpen(false)} />
           </div>
         </>
       )}
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex flex-col fixed top-0 left-0 bottom-0 w-72 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 z-20">
+      <aside className="hidden lg:flex flex-col fixed top-0 left-0 bottom-0 w-72 bg-white dark:bg-black border-r border-gray-200 dark:border-gray-700 z-20">
         <SidebarContent pathname={pathname} />
       </aside>
     </>
