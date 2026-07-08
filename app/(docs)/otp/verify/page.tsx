@@ -27,7 +27,7 @@ export default function OtpVerifyPage() {
       <ApiEndpoint
         title="Verify OTP"
         method="POST"
-        url={`${baseUrl}/v1/otp/verify`}
+        url={`${baseUrl}/v1/vendor/otp/verify`}
         description="phone_number --- must match the number used in Generate OTP. otp_code --- 6-digit code received via SMS. reference_id --- UUID returned by Generate OTP. No API key required. Maximum 5 wrong attempts per reference_id."
         headers={[
           { key: 'Accept', value: 'application/json', enabled: true },

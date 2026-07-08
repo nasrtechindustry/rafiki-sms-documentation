@@ -24,7 +24,7 @@ export default function OtpGeneratePage() {
       <ApiEndpoint
         title="Generate OTP"
         method="POST"
-        url={`${baseUrl}/v1/otp/generate`}
+        url={`${baseUrl}/v1/vendor/otp/generate`}
         description="phone_number or phone --- destination number (E.164 or local 0XXXXXXXXX). sender_id (optional) --- one of your approved sender names. If omitted, the SMS will be sent using the RafikiSMS default company sender name instead of your brand. Returns reference_id + expires_in_seconds (300)."
         headers={[
           { key: 'Accept', value: 'application/json', enabled: true },
