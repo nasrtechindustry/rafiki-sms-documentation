@@ -14,11 +14,11 @@ export default function SmsLogsPage() {
       <ApiEndpoint
         title="Get SMS Logs"
         method="GET"
-        url={`${baseUrl}/v1/sms-logs`}
-        description="Retrieve SMS logs for the authenticated user. Returns a paginated list of all SMS messages sent by the user."
+        url={`${baseUrl}/v1/vendor/sms-logs`}
+        description="Retrieve SMS logs for your account using your API key. Returns a paginated list of all SMS messages you sent. Use query parameters to filter — page, per_page, status (sent, delivered, failed, pending), start_date, end_date (Y-m-d format)."
         headers={[
           { key: 'Accept', value: 'application/json', enabled: true },
-          { key: 'Authorization', value: 'Bearer YOUR_ACCESS_TOKEN', enabled: true },
+          { key: 'X-API-Key', value: 'sk_your_api_key_here', enabled: true },
         ]}
         successResponse={{
           status: 'success',

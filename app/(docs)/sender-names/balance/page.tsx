@@ -15,7 +15,7 @@ export default function BalancePage() {
         title="Check Balance"
         method="GET"
         url={`${baseUrl}/v1/vendor/balance`}
-        description="Check your Beem Africa account credit balance. Returns the current credit balance available in your account."
+        description="Check your remaining SMS credit balance. Returns the current credit balance available for your account."
         headers={[
           { key: 'Accept', value: 'application/json', enabled: true },
           { key: 'X-API-Key', value: 'sk_your_api_key_here', enabled: true },
