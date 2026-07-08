@@ -14,12 +14,12 @@ export default function RequestSenderNamePage() {
       <ApiEndpoint
         title="Request Sender Name"
         method="POST"
-        url={`${baseUrl}/v1/sender-names/request`}
-        description="Request a new sender name. The sender ID must not exceed 11 characters and can only contain letters, numbers, spaces, hyphens (-), and dots (.). Sample content must be at least 15 characters describing the purpose of the sender name. Note: This endpoint uses Bearer token auth (dashboard session). To use X-API-Key auth, request sender names via the dashboard at Profile → Sender Names."
+        url={`${baseUrl}/v1/vendor/sender-names/request`}
+        description="Request a new sender name using your API key. The sender ID must not exceed 11 characters and can only contain letters, numbers, spaces, hyphens (-), and dots (.). Sample content must be at least 15 characters describing the purpose of the sender name."
         headers={[
           { key: 'Accept', value: 'application/json', enabled: true },
           { key: 'Content-Type', value: 'application/json', enabled: true },
-          { key: 'Authorization', value: 'Bearer YOUR_ACCESS_TOKEN', enabled: true },
+          { key: 'X-API-Key', value: 'sk_your_api_key_here', enabled: true },
         ]}
         requestBody={{
           senderid: 'STARSHINE',
